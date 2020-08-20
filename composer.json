@@ -1,0 +1,17 @@
+{
+    "name": "aquila/simple-mvc",
+    "description": "A simple PHP MVC framework",
+    "type": "project",
+    "authors": [
+        {
+            "name": "4quila",
+            "email": "aquila2163@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "app\\": "./"
+        }
+    },
+    "require": {}
+}
