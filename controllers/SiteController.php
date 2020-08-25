@@ -19,7 +19,5 @@ class SiteController extends Controller
     public function handleContact(Request $request)
     {
         $data = $request->body();
-        var_dump($data);
-        die();
     }
 }
