@@ -1,24 +1,14 @@
-<form action="" method="post">
-  <div class="form-group">
-    <label>Firstname</label>
-    <input type="text" name="firstname" class="form-control">
+<?php $form = \app\core\form\Form::start('', 'post'); ?>
+  <div class="row">
+    <div class="col">
+      <?php echo $form->field($model, 'firstname'); ?>
+    </div>
+    <div class="col">
+      <?php echo $form->field($model, 'lastname'); ?>
+    </div>
   </div>
-  <div class="form-group">
-    <label>Lastname</label>
-    <input type="text" name="lastname" class="form-control">
-  </div>
-  <div class="form-group">
-    <label>Email address</label>
-    <input type="text" name="email" class="form-control">
-    <small class="form-text text-muted">We'll never share your email with anyone else.</small>
-  </div>
-  <div class="form-group">
-    <label>Password</label></label>
-    <input type="password" name="password" class="form-control">
-  </div>
-  <div class="form-group">
-    <label>Confirm Password</label></label>
-    <input type="password" name="confirmPassword" class="form-control">
-  </div>
+  <?php echo $form->field($model, 'email')->emailField(); ?>
+  <?php echo $form->field($model, 'password')->passwordField(); ?>
+  <?php echo $form->field($model, 'confirmPassword')->passwordField(); ?>
   <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+<?php \app\core\form\Form::end(); ?>
