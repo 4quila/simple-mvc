@@ -7,16 +7,21 @@ use app\models\UserModel;
 
 class AuthController extends Controller
 {
-    public function register()
-    {
-        return $this->render('register');
-    }
-
-    public function handleRegister(Request $request)
+    public function register(Request $request)
     {
         $model = new UserModel();
-        $model->loadData($request->body());
-        $model->validate();
-        return var_dump($model->errors);
+        if ($request->isPost()) {
+            $model->loadData($request->body());
+            if ($model->validate() && $model->register()) {
+                return "register successful.";
+            }
+            return $this->render('register', [
+                'model' => $model
+            ]);
+        }
+        return $this->render('register', [
+            'model' => $model
+        ]);
     }
+
 }

@@ -13,6 +13,6 @@ $app->router->get('/', [SiteController::class, 'index']);
 $app->router->get('/contact', [SiteController::class, 'contact']);
 $app->router->post('/contact', [SiteController::class, 'handleContact']);
 $app->router->get('/register', [AuthController::class, 'register']);
-$app->router->post('/register', [AuthController::class, 'handleRegister']);
+$app->router->post('/register', [AuthController::class, 'register']);
 
 $app->run();

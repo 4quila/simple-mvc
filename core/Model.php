@@ -5,11 +5,11 @@ namespace app\core;
 abstract class Model
 {
     public array $errors = [];
-    protected string $RULE_REQUIRED = 'required';
-    protected string $RULE_EMAIL = 'email';
-    protected string $RULE_MIN = 'min';
-    protected string $RULE_MAX = 'max';
-    protected string $RULE_MATCH = 'match';
+    const RULE_REQUIRED = 'required';
+    const RULE_EMAIL = 'email';
+    const RULE_MIN = 'min';
+    const RULE_MAX = 'max';
+    const RULE_MATCH = 'match';
 
     public function loadData(array $data)
     {
@@ -37,23 +37,24 @@ abstract class Model
                     $ruleName = $rule;
                 }
 
-                if (($ruleName == $this->RULE_REQUIRED) && empty($value)) {
+                if (($ruleName == self::RULE_REQUIRED) && empty($value)) {
                     $this->addError($attr, $ruleName);
                 }
-                if (($ruleName == $this->RULE_EMAIL) && !filter_var($value, FILTER_VALIDATE_EMAIL)) {
+                if (($ruleName == self::RULE_EMAIL) && !filter_var($value, FILTER_VALIDATE_EMAIL)) {
                     $this->addError($attr, $ruleName);
                 }
-                if (($ruleName == $this->RULE_MIN) && (strlen($value) < $rule[1]['min'])) {
-                    $this->addError($attr, $ruleName, $rule[1]);
+                if (($ruleName == self::RULE_MIN) && (strlen($value) < $rule['min'])) {
+                    $this->addError($attr, $ruleName, $rule);
                 }
-                if (($ruleName == $this->RULE_MAX) && (strlen($value) > $rule[1]['max'])) {
-                    $this->addError($attr, $ruleName, $rule[1]);
+                if (($ruleName == self::RULE_MAX) && (strlen($value) > $rule['max'])) {
+                    $this->addError($attr, $ruleName, $rule);
                 }
-                if (($ruleName == $this->RULE_MATCH) && ($value !== $this->{$rule[1]['match']})) {
-                    $this->addError($attr, $ruleName, $rule[1]);
+                if (($ruleName == self::RULE_MATCH) && ($value !== $this->{$rule['match']})) {
+                    $this->addError($attr, $ruleName, $rule);
                 }
             }
         }
+        return empty($this->errors);
     }
 
     public function addError(string $attr, string $ruleName, array $params = [])
@@ -72,11 +73,21 @@ abstract class Model
     public function errorList()
     {
         return [
-            $this->RULE_REQUIRED => 'This field is required.',
-            $this->RULE_EMAIL => 'Email has to be in the right format.',
-            $this->RULE_MATCH => '{field} must be the same as {match}.',
-            $this->RULE_MIN => 'This field has to be longer than {min}.',
-            $this->RULE_MAX => 'This field has to be less than {max}',
+            self::RULE_REQUIRED => 'This field is required.',
+            self::RULE_EMAIL => 'Email has to be in the right format.',
+            self::RULE_MATCH => '{field} must be the same as {match}.',
+            self::RULE_MIN => 'This field has to be longer than {min}.',
+            self::RULE_MAX => 'This field has to be less than {max}',
         ];
+    }
+
+    public function hasError(string $attr)
+    {
+        return $this->errors[$attr] ?? false;
+    }
+
+    public function getFirstError(string $attr)
+    {
+        return $this->errors[$attr][0] ?? false;
     }
 }

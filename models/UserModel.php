@@ -5,33 +5,38 @@ use app\core\Model;
 
 class UserModel extends Model
 {
-    protected string $firstname;
-    protected string $lastname;
-    protected string $email;
-    protected string $password;
-    protected string $confirmPassword;
+    public string $firstname = '';
+    public string $lastname = '';
+    public string $email = '';
+    public string $password = '';
+    public string $confirmPassword = '';
+
+    public function register()
+    {
+        return 'Creating User.';
+    }
 
     protected function rules(): array
     {
         return [
             'firstname' => [
-                'required',
+                self::RULE_REQUIRED,
             ],
             'lastname' => [
-                'required',
+                self::RULE_REQUIRED,
             ],
             'email' => [
-                'required',
-                'email',
+                self::RULE_REQUIRED,
+                self::RULE_REQUIRED,
             ],
             'password' => [
-                'required',
-                ['min', ['min' => 6]],
-                ['max', ['max' => 12]],
+                self::RULE_REQUIRED,
+                [self::RULE_MIN, 'min' => 6],
+                [self::RULE_MAX, 'max' => 12],
             ],
             'confirmPassword' => [
-                'required',
-                ['match', ['field' => 'Confirm Password', 'match' => 'password']],
+                self::RULE_REQUIRED,
+                [self::RULE_MATCH, 'field' => 'Confirm Password', 'match' => 'password'],
             ],
         ];
     }
