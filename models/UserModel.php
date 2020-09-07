@@ -22,7 +22,7 @@ class UserModel extends DbModel
         return parent::save();
     }
 
-    public function tableName(): string
+    public static function tableName(): string
     {
         return 'users';
     }
@@ -30,6 +30,17 @@ class UserModel extends DbModel
     public function attributes(): array
     {
         return ['firstname', 'lastname', 'email', 'password', 'status'];
+    }
+
+    public function getLabels()
+    {
+        return [
+            'firstname' => 'First name',
+            'lastname' => 'Last name',
+            'email' => 'Email',
+            'password' => 'Password',
+            'confirmPassword' => 'Confirm password',
+        ];
     }
 
     protected function rules(): array
@@ -44,6 +55,7 @@ class UserModel extends DbModel
             'email' => [
                 self::RULE_REQUIRED,
                 self::RULE_REQUIRED,
+                [self::RULE_UNIQUE, 'class' => self::class, 'attr' => 'email'],
             ],
             'password' => [
                 self::RULE_REQUIRED,
@@ -52,7 +64,7 @@ class UserModel extends DbModel
             ],
             'confirmPassword' => [
                 self::RULE_REQUIRED,
-                [self::RULE_MATCH, 'field' => 'Confirm Password', 'match' => 'password'],
+                [self::RULE_MATCH, 'field' => 'confirmPassword', 'match' => 'password'],
             ],
         ];
     }

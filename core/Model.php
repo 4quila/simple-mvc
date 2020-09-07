@@ -10,6 +10,7 @@ abstract class Model
     const RULE_MIN = 'min';
     const RULE_MAX = 'max';
     const RULE_MATCH = 'match';
+    const RULE_UNIQUE = 'unique';
 
     public function loadData(array $data)
     {
@@ -23,6 +24,11 @@ abstract class Model
     }
 
     abstract protected function rules(): array;
+
+    public function getLabels()
+    {
+        return [];
+    }
 
     public function validate()
     {
@@ -52,6 +58,15 @@ abstract class Model
                 if (($ruleName == self::RULE_MATCH) && ($value !== $this->{$rule['match']})) {
                     $this->addError($attr, $ruleName, $rule);
                 }
+                if ($ruleName == self::RULE_UNIQUE) {
+                    $tableName = $rule['class']::tableName();
+                    $stmt = $this->prepare("SELECT * FROM {$tableName} WHERE {$rule['attr']}='{$value}'");
+                    $stmt->execute();
+                    $record = $stmt->fetch(\PDO::FETCH_OBJ);
+                    if ($record) {
+                        $this->addError($attr, $ruleName, $rule);
+                    }
+                }
             }
         }
         return empty($this->errors);
@@ -64,7 +79,7 @@ abstract class Model
         {
             foreach ($params as $key => $value)
             {
-                $errorText = str_replace("{{$key}}", ucfirst($value), $errorText);
+                $errorText = str_replace("{{$key}}", $this->getLabels()[$value] ?? '', $errorText);
             }
         }
         $this->errors[$attr][] = $errorText;
@@ -78,6 +93,7 @@ abstract class Model
             self::RULE_MATCH => '{field} must be the same as {match}.',
             self::RULE_MIN => 'This field has to be longer than {min}.',
             self::RULE_MAX => 'This field has to be less than {max}',
+            self::RULE_UNIQUE => 'There is already a user by this {attr}.',
         ];
     }
 

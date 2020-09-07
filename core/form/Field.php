@@ -30,7 +30,7 @@ class Field
               </div>
             </div>
         ',
-        $this->attr,
+        $this->model->getLabels()[$this->attr],
         $this->type,
         $this->attr,
         $this->type !== self::TYPE_PASSWORD ? $this->model->{$this->attr} : '',
