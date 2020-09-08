@@ -15,7 +15,7 @@ class AuthController extends Controller
             $user->loadData($request->body());
             if ($user->validate() && $user->save()) {
                 Application::$app->session->setFlashMessage('success', 'You have successfully signed up!');
-                header('Location: /');
+                Application::$app->response->redirect('/');
                 exit;
             }
             return $this->render('register', [
