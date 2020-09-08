@@ -10,6 +10,7 @@ class Application
     public Request $request;
     public Database $database;
     public Response $response;
+    public Session $session;
     public Router $router;
     public string $ROOT_DIR;
 
@@ -19,6 +20,7 @@ class Application
         $this->ROOT_DIR = $ROOT_DIR;
         $this->request = new Request();
         $this->response = new Response();
+        $this->session = new Session();
         $this->router = new Router($this->request, $this->response);
 
         $this->database = new Database($config['db']);

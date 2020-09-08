@@ -1,6 +1,7 @@
 <?php
 
 namespace app\controllers;
+use app\core\Application;
 use app\core\Controller;
 use app\core\Request;
 use app\models\UserModel;
@@ -13,7 +14,9 @@ class AuthController extends Controller
         if ($request->isPost()) {
             $user->loadData($request->body());
             if ($user->validate() && $user->save()) {
-                return 'successfull';
+                Application::$app->session->setFlashMessage('success', 'You have successfully signed up!');
+                header('Location: /');
+                exit;
             }
             return $this->render('register', [
                 'model' => $user
